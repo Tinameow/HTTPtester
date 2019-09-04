@@ -1,0 +1,15 @@
+#xlrd
+sheet.row_values(i) -> [str]
+
+
+#openpyxl
+wb = Workbook()  
+wb = load_workbook(filename)
+ws = wb[sheetname]
+sheet_names = wb.get_sheet_names()
+ws1 = wb.create_sheet(index,title)
+ws.title = "New Title"
+c = ws['A4']  
+d = ws.cell(row = 4, column = 2) 
+ws.cell(row = 4, column = 2).value = 'test'
+get_cell_collection()     #读所有单元格数据
