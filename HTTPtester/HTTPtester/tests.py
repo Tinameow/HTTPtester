@@ -25,10 +25,11 @@ def test_cases():
         return jsonify(ProjectNotExistErrMessage), 404
 
     tid = datamanager.create_test(args.proj_id,args.cid)
-    executor.submit(runtests.run,tid)
+    #runtests.run(tid)
+    executor.submit(runtests.run,tid) # 实现异步
     return jsonify({"ERRCOD": "SUC000",
-                        "ERRMSG": "请求成功",
-                        "tid": tid} )
+                    "ERRMSG": "请求成功",
+                    "tid": tid} )
 
 
 
@@ -44,7 +45,7 @@ def list_tests():
         
     return jsonify({"ERRCOD": "SUC000",
                     "ERRMSG": "请求成功",
-                    "Projects": datamanager.get_tests(args.proj_id)})
+                    "Tests": datamanager.get_tests(args.proj_id)})
 
 
 
@@ -62,11 +63,13 @@ def get_test():
 
     info = datamanager.get_test(tid)
     if info['status'] != 'Done':
-        return jsonify(info)
+        return jsonify({"ERRCOD": "ERR000",
+                        "ERRMSG": "请求失败",
+                        "Result":info})
 
     return jsonify({"ERRCOD": "SUC000",
                     "ERRMSG": "请求成功",
-                    "Projects": datamanager.get_testcases(tid)})
+                    "Result": datamanager.get_testcases(tid)})
 
 
 

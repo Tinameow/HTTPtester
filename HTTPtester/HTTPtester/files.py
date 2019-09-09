@@ -39,22 +39,24 @@ def upload_file():
 
 @app.route('/testcases/download', methods = ['GET'])
 def download_file():
-    '''通过输入项目编号proj_id和测试案例编号cid提供用户导出测试案例信息的接口'''
+    '''通过输入项目编号(proj_id)和测试案例编号(cid)提供用户导出测试案例信息的接口'''
     parser = reqparse.RequestParser()
     parser.add_argument('proj_id', type=str, required=True, location='args')
-    parser.add_argument('cid', type=int, required=True, action='append', location='args')
+    parser.add_argument('cid', type=int, action='append', location='args')
     args = parser.parse_args()
     if not datamanager.exist_proj_id(args.proj_id):
         return jsonify(ProjectNotExistErrMessage), 404
 
     file = _download(args.proj_id,args.cid)
-    if file:
-        response = make_response(file)
-        response.headers["Content-Disposition"] = f"attachment;filename={args.proj_id}.xlsx"
-        response.headers['Content-Type'] = 'xlsx'
-        return response
-    return jsonify({"ERRCOD": "ERR000",
-                       "ERRMSG": "项目不存在"} )
+    if not file:
+        return jsonify({"ERRCOD": "ERR000",
+                            "ERRMSG": "文件读取失败"} )
+
+    response = make_response(file)
+    response.headers["Content-Disposition"] = f"attachment;filename={args.proj_id}.xlsx"
+    response.headers['Content-Type'] = 'xlsx'
+    return response
+    
 
 
 
@@ -63,7 +65,7 @@ def _allowed_file(filename:str):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def _read_upload(file):
+def _read_upload(file)->[list]:
     sheet = xlrd.open_workbook(file_contents=file.read()).sheets()[0]
     cases = []
     for i in range(1,sheet.nrows):

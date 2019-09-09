@@ -11,7 +11,7 @@ ProjectNotExistErrMessage = {"ERRCOD": "ERRCOD", "ERRMSG": "项目不存在"}
 
 @app.route('/projects/',methods = ['GET'])
 def list_projects():
-    '''返回所有项目的名字和项目编号'''
+    '''返回所有项目的名字(proj_name)、项目信息(proj_info)、和项目编号(proj_id)'''
     projects = datamanager.get_projects()
     return jsonify({"ERRCOD": "SUC000",
                     "ERRMSG": "请求成功",
@@ -53,11 +53,6 @@ def delete_project():
     datamanager.delete_proj(args.proj_id)
     return jsonify({"ERRCOD": "SUC000",
                     "ERRMSG": "请求成功"} )
-
-
-
-
-
 
 
 

@@ -1,23 +1,24 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import requests
 import xlrd, openpyxl
 import os
 import json
 from HTTPtester import app 
-from app.models import User, Role
 
 WORKBOOK = 'data/projectmanager.xlsx'
 DATADIR = 'data'
 URL = 'http://127.0.0.1:5000/'
 
 class TestAPI(unittest.TestCase):
+    def setUp(self):
+        app.testing = True
+        self.client = app.test_client()
 
     def test_get_projects(self):
         url = URL + 'projects'
         exp_response = '{"ERRCOD": "SUC000", "ERRMSG": "请求成功", "Projects": []}'
-        response = requests.get(url).text
+        response = self.client().get(url).text
         self.assertEqual(response, exp_response)
         
 

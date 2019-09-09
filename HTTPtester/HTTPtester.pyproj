@@ -51,6 +51,9 @@
     <Compile Include="HTTPtester\files.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HTTPtester\logger.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HTTPtester\projects.py">
       <SubType>Code</SubType>
     </Compile>
